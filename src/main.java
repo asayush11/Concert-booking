@@ -34,6 +34,9 @@ public class main {
         List<Seat> selectedSeats1 = selectSeats(concert1, 3);
         Booking booking1 = bookingSystem.bookTickets(user1, concert1, selectedSeats1);
 
+        List<Seat> selectedSeats5 = selectSeats(concert1, 97);
+        Booking booking4 = bookingSystem.bookTickets(user1, concert1, selectedSeats5);
+
         List<Seat> selectedSeats2 = selectSeats(concert2, 2);
         Booking booking2 = bookingSystem.bookTickets(user2, concert2, selectedSeats2);
 
@@ -51,7 +54,7 @@ public class main {
             String seatNumber = "S" + i;
             SeatType seatType = (i <= 10) ? SeatType.VIP : (i <= 30) ? SeatType.PREMIUM : SeatType.REGULAR;
             double price = (seatType == SeatType.VIP) ? 100.0 : (seatType == SeatType.PREMIUM) ? 75.0 : 50.0;
-            seats.add(new Seat(seatNumber, seatNumber, seatType, price));
+            seats.add(new Seat(seatNumber, seatType, price));
         }
         return seats;
     }
@@ -63,6 +66,7 @@ public class main {
                 .limit(numberOfSeats)
                 .toList();
         selectedSeats.addAll(availableSeats);
+        if(selectedSeats.size()<numberOfSeats) selectedSeats.clear();
         return selectedSeats;
     }
 
