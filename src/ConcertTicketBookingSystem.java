@@ -1,6 +1,7 @@
 package src;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -9,12 +10,12 @@ import java.util.stream.Collectors;
 
 public class ConcertTicketBookingSystem {
     private static ConcertTicketBookingSystem instance;
-    private final Map<String, Concert> concerts;
+    private final List<Concert> concerts;
     private final Map<String, Booking> bookings;
     private final Object lock = new Object();
 
     private ConcertTicketBookingSystem() {
-        concerts = new ConcurrentHashMap<>();
+        concerts = new ArrayList<>();
         bookings = new ConcurrentHashMap<>();
     }
 
@@ -26,15 +27,12 @@ public class ConcertTicketBookingSystem {
     }
 
     public void addConcert(Concert concert) {
-        concerts.put(concert.getId(), concert);
+        concerts.add(concert);
     }
 
-    public Concert getConcert(String concertId) {
-        return concerts.get(concertId);
-    }
 
     public List<Concert> searchConcerts(String artist, String venue, LocalDateTime dateTime) {
-        return concerts.values().stream()
+        return concerts.stream()
                 .filter(concert -> concert.getArtist().equalsIgnoreCase(artist) &&
                         concert.getVenue().equalsIgnoreCase(venue) &&
                         concert.getDateTime().equals(dateTime))
@@ -42,11 +40,12 @@ public class ConcertTicketBookingSystem {
     }
 
     public Booking bookTickets(User user, Concert concert, List<Seat> seats) {
+        if(seats.isEmpty()) throw new RuntimeException("Enough seats are not there");
         synchronized (lock) {
             // Check seat availability and book seats
             for (Seat seat : seats) {
                 if (seat.getStatus() != SeatStatus.AVAILABLE) {
-                    throw new SeatNotAvailableException("Seat " + seat.getSeatNumber() + " is not available.");
+                    throw new RuntimeException("Seat " + seat.getSeatNumber() + " is not available.");
                 }
             }
             seats.forEach(Seat::book);

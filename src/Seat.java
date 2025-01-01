@@ -1,14 +1,12 @@
 package src;
 
 public class Seat {
-    private final String id;
     private final String seatNumber;
     private final SeatType seatType;
     private final double price;
     private SeatStatus status;
 
-    public Seat(String id, String seatNumber, SeatType seatType, double price) {
-        this.id = id;
+    public Seat(String seatNumber, SeatType seatType, double price) {
         this.seatNumber = seatNumber;
         this.seatType = seatType;
         this.price = price;
@@ -19,7 +17,7 @@ public class Seat {
         if (status == SeatStatus.AVAILABLE) {
             status = SeatStatus.BOOKED;
         } else {
-            throw new SeatNotAvailableException("Seat is already booked or reserved.");
+            throw new RuntimeException("Seat is already booked or reserved.");
         }
     }
 
@@ -31,10 +29,6 @@ public class Seat {
 
     public double getPrice() {
         return price;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getSeatNumber() {

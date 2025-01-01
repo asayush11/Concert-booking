@@ -29,7 +29,7 @@ public class Booking {
     }
 
     public void cancelBooking() {
-        if (status == BookingStatus.CONFIRMED) {
+        if (status != BookingStatus.CANCELLED) {
             status = BookingStatus.CANCELLED;
             seats.forEach(Seat::release);
             System.out.println("Booking %s cancelled");
