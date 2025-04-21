@@ -32,7 +32,7 @@ public class Booking {
         if (status != BookingStatus.CANCELLED) {
             status = BookingStatus.CANCELLED;
             seats.forEach(Seat::release);
-            System.out.println("Booking %s cancelled");
+            System.out.println("Booking " + this.id + " is cancelled");
         }
     }
 
